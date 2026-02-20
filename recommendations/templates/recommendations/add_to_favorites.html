@@ -1,0 +1,26 @@
+{% extends 'includes/base.html' %}
+
+{% block title %}Добавить в избранное{% endblock %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Добавить контент в избранное</h1>
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}" role="alert">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+    <form method="post" action="{% url 'recommendations:add_to_favorites' %}">
+        {% csrf_token %}
+        <div class="mb-3">
+            <label for="content_id" class="form-label">ID контента</label>
+            <input type="number" class="form-control" id="content_id" name="content_id" required placeholder="Введите ID фильма или сериала">
+            <div class="form-text">Найдите ID на странице контента в Movie_app.</div>
+        </div>
+        <button type="submit" class="btn btn-primary">Добавить в избранное</button>
+    </form>
+    <a href="{% url 'recommendations:get_favorites' %}" class="btn btn-secondary mt-3">Посмотреть избранное</a>
+</div>
+{% endblock %}

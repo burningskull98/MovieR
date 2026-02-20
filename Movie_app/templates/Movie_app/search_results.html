@@ -1,0 +1,29 @@
+{% extends 'includes/base.html' %}
+{% block content %}
+<h1>Поиск контента</h1>
+<form method="get" action="{% url 'Movie_app:search_results' %}">
+    {{ form.as_p }}
+    <button type="submit">Искать</button>
+</form>
+
+{% if query %}
+<h2>Результаты по запросу: "{{query}}"</h2>
+{% if results %}
+<ul>
+    {% for content in results %}
+    <li>
+        <img src="{{ content.poster_url }}" alt="{{ content.title }}"
+             style="width: 100px; height: auto; margin-right: 10px;">
+        <a href="{% url 'Movie_app:content_detail' content.tmdb_id %}">{{ content.title }}</a>
+        <p>{{ content.description|truncatewords:100 }}</p>
+    </li>
+    {% endfor %}
+</ul>
+{% else %}
+<p>Ничего не найдено.</p>
+{% endif %}
+{% else %}
+<p>Введите запрос для поиска.</p>
+{% endif %}
+<a href="{% url 'Movie_app:content_list' %}">Вернуться к списку контента</a>
+{% endblock %}

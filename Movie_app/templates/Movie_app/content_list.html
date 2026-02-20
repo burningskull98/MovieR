@@ -1,0 +1,50 @@
+{% extends 'includes/base.html' %}
+
+{% block content %}
+<div class="container my-4">
+    <h2>Все фильмы и сериалы</h2>
+
+    {% if contents %}
+        <div class="row">
+            {% for content in contents %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    {% if content.poster_url %}
+                    <img src="{{ content.poster_url }}" class="card-img-top" alt="{{ content.title }}"
+                         onerror="this.src='https://via.placeholder.com/500x750?text=Image+Error'">
+                    {% else %}
+                    <img src="https://via.placeholder.com/500x750?text=No+Image" class="card-img-top"
+                         alt="{{ content.title }}">
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ content.title }}</h5>
+                        <p class="card-text">{{ content.description|truncatechars:100 }}</p>
+                        <p>Рейтинг: {{ content.rating }}/100</p>
+                        {% if content.is_series %}  <!-- Добавлено: отображение сезонов и эпизодов только для сериалов -->
+                        <p>Сезонов: {{ content.seasons }}, Эпизодов: {{ content.episodes }}</p>
+                        {% endif %}
+                        <a href="{% url 'Movie_app:content_detail' content.tmdb_id %}" class="btn btn-primary">Подробнее</a>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <!-- Пагинация -->
+        {% if is_paginated %}
+            <nav aria-label="Page navigation">
+                <ul class="pagination">
+                    {% if page_obj.has_previous %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Предыдущая</a></li>
+                    {% endif %}
+                    <li class="page-item active"><span class="page-link">{{ page_obj.number }}</span></li>
+                    {% if page_obj.has_next %}
+                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Следующая</a></li>
+                    {% endif %}
+                </ul>
+            </nav>
+        {% endif %}
+    {% else %}
+        <p>Контент не найден.</p>
+    {% endif %}
+</div>
+{% endblock %}

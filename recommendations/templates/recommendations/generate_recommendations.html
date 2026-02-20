@@ -1,0 +1,52 @@
+{% extends 'includes/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Сгенерировать рекомендации</h1>
+    <form method="post" id="recommendation-form">
+        {% csrf_token %}
+        <div class="mb-3">
+            {{ form.genres.label_tag }}
+            {{ form.genres }}
+        </div>
+        <div class="mb-3">
+            {{ form.actors.label_tag }}
+            {{ form.actors }}
+        </div>
+        <div class="mb-3">
+            {{ form.directors.label_tag }}
+            {{ form.directors }}
+        </div>
+        <div class="mb-3">
+            {{ form.favorite_content.label_tag }}
+            {{ form.favorite_content }}
+            <small class="form-text text-muted">Если контент не найден, он будет пропущен.</small>
+        </div>
+        <div class="mb-3">
+            {{ form.disliked_content.label_tag }}
+            {{ form.disliked_content }}
+            <small class="form-text text-muted"> Этот контент будет исключен из рекомендаций.</small>
+        </div>
+        <button type="submit" class="btn btn-primary">Сгенерировать</button>
+        <button type="button" class="btn btn-secondary" onclick="document.getElementById('recommendation-form').reset(); $('.select2').val(null).trigger('change');">Очистить форму</button>
+    </form>
+
+    <!-- Новая кнопка для случайного подбора -->
+    <div class="mt-3">
+        <a href="{% url 'recommendations:random_recommendation' %}" class="btn btn-secondary">Показать случайный контент</a>
+    </div>
+</div>
+
+<!-- Добавьте CSS и JS для Select2 (только для жанров, актёров, режиссёров) -->
+<link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+<script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+<script>
+    $(document).ready(function() {
+        $('.select2').select2({
+            placeholder: "Выберите опции...",
+            allowClear: true,
+            width: '100%'
+        });
+    });
+</script>
+{% endblock %}

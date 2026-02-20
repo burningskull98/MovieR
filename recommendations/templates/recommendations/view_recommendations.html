@@ -1,0 +1,21 @@
+{% extends 'includes/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Ваши рекомендации</h1>
+    <div class="row">
+        {% for rec in recommendations %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                <img src="{{ rec.content.poster_url }}" class="card-img-top" alt="{{ rec.content.title }}">
+                <div class="card-body">
+                    <h5 class="card-title">{{ rec.content.title }}</h5>
+                    <p>Score: {{ rec.score }}</p>
+                    <a href="{% url 'Movie_app:content_detail' rec.content.tmdb_id %}" class="btn btn-primary">Подробнее</a>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}

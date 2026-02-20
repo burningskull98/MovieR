@@ -1,0 +1,27 @@
+{% extends 'includes/base.html' %}
+
+{% block content %}
+<div class="container mt-5">
+    <h1>Случайный контент</h1>
+    {% if content %}
+        <div class="card">
+            <img src="{{ content.poster_url }}" class="card-img-top" alt="{{ content.title }}">
+            <div class="card-body">
+                <h5 class="card-title">{{ content.title }}</h5>
+                <p class="card-text">{{ content.description|truncatechars:200 }}</p>
+                <p>Рейтинг: {{ content.rating }}/100</p>
+                {% if content.seasons %}
+                <p>Сезонов: {{ content.seasons }}, Эпизодов: {{ content.episodes }}</p>
+                {% endif %}
+                <a href="{% url 'Movie_app:content_detail' content.tmdb_id %}" class="btn btn-primary">Подробнее</a>
+            </div>
+        </div>
+        <div class="mt-3">
+            <a href="{% url 'recommendations:random_recommendation' %}" class="btn btn-secondary">Показать другой случайный контент</a>
+        </div>
+    {% else %}
+        <p>Контент не найден. Попробуйте позже.</p>
+        <a href="{% url 'recommendations:generate_recommendations' %}" class="btn btn-outline-primary">Вернуться</a>
+    {% endif %}
+</div>
+{% endblock %}

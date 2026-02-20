@@ -1,0 +1,17 @@
+{% extends 'includes/base.html' %}
+{% block content %}
+    <meta charset="UTF-8">
+    <title>Вход</title>
+{% load static %}
+ <link rel="stylesheet" href="{% static 'css/styles.css' %}">
+    <h1>Добро пожаловать в Библиотеку Кадров</h1>
+     <p>Персональный сервис подбора фильмов</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit" class="btn btn-warning">Войти</button>
+    </form>
+    <p>Нет аккаунта? <a class="btn btn-outline-warning" href="{% url 'user:registration' %}">Зарегистрироваться</a></p>
+{% endblock %}
+
+

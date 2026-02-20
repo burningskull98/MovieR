@@ -1,0 +1,36 @@
+{% extends 'includes/base.html' %}
+
+{% block content %}
+<div class="container my-4">
+    <h2>{{ content.title }}</h2>
+    <img src="{{ content.poster_url }}" alt="{{ content.title }}" class="img-fluid mb-3">
+    <p>{{ content.description }}</p>
+    <p>Дата выхода: {{ content.release_date }}</p>
+    <p>Рейтинг: {{ content.rating }}/100</p>
+    <p>Жанр: {% for genre in content.genres.all %}{{ genre.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+    <p>Страна: {% for country in content.created_in.all %}{{ country.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+    <p>Режиссёр: {% for dir in content.director.all %}{{ dir.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+    <p>Актёры: {% for actor in content.actors.all %}{{ actor.name }}{% if not forloop.last %}, {% endif %}{% endfor %}</p>
+    {% if content.seasons %}
+    <p>Сезонов: {{ content.seasons }}, Эпизодов: {{ content.episodes }}</p>
+    {% endif %}
+
+   <!-- Внутри блока content, после описания -->
+{% if user.is_authenticated and user_preferences %}
+    {% if content in user_preferences.favorite_content.all %}
+        <form method="post" action="{% url 'recommendations:remove_from_favorites' content.tmdb_id %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-danger">Удалить из избранного</button>
+        </form>
+    {% else %}
+        <form method="post" action="{% url 'recommendations:add_to_favorites' content.tmdb_id %}" style="display: inline;">
+            {% csrf_token %}
+            <button type="submit" class="btn btn-success">Добавить в избранное</button>
+        </form>
+    {% endif %}
+{% else %}
+    <p>Войдите в аккаунт, чтобы добавить в избранное.</p>
+
+    {% endif %}
+</div>
+{% endblock %}
