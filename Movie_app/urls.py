@@ -20,4 +20,5 @@ urlpatterns = [
     path('movies/', views.MovieListView.as_view(), name='movie_list'),
     path('series/', views.SeriesListView.as_view(), name='series_list'),
     path("search_results/", views.content_search, name="search_results"),
+    path('', views.HomeView.as_view(), name='home'),
 ]

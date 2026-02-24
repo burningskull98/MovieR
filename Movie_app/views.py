@@ -11,11 +11,45 @@ from recommendations.models import UserPreference
 from .forms import SearchForm, ContentFilterForm, MovieFilterForm, SeriesFilterForm
 from .models import Actor, Content, Country, Director, Genre, Movie, Series
 
+
+class HomeView(ListView):
+    model = Content
+    template_name = 'Movie_app/home.html'
+    context_object_name = 'contents'
+
+    def get_queryset(self):
+        queryset = super().get_queryset()
+        queryset = queryset.order_by('-tmdb_id')
+        form = ContentFilterForm(self.request.GET)
+        if form.is_valid():
+            genres = form.cleaned_data.get('genres')
+            actors = form.cleaned_data.get('actors')
+            directors = form.cleaned_data.get('directors')
+            countries = form.cleaned_data.get('countries')
+            if genres:
+                queryset = queryset.filter(genres__in=genres)
+            if actors:
+                queryset = queryset.filter(actors__in=actors)
+            if directors:
+                queryset = queryset.filter(director__in=directors)
+            if countries:
+                queryset = queryset.filter(created_in__in=countries)
+        return queryset.distinct()
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['filter_form'] = ContentFilterForm(self.request.GET)
+        for content in context['contents']:
+            content.is_series = isinstance(content, Series)
+        return context
+
+
 class GenreListView(ListView):
     """Отображение списка жанров"""
     model = Genre
     template_name = 'Movie_app/genre_list.html'
     context_object_name = 'genres'
+    paginate_by = 20
 
 
 class GenreDetailView(DetailView):
@@ -41,6 +75,7 @@ class ActorListView(ListView):
     model = Actor
     template_name = 'Movie_app/actor_list.html'
     context_object_name = 'actors'
+    paginate_by = 20
 
 
 class ActorDetailView(DetailView):
@@ -66,6 +101,7 @@ class DirectorListView(ListView):
     model = Director
     template_name = 'Movie_app/director_list.html'
     context_object_name = 'directors'
+    paginate_by = 20
 
 
 class DirectorDetailView(DetailView):
@@ -90,6 +126,7 @@ class CountryListView(ListView):
     model = Country
     template_name = 'Movie_app/country_list.html'
     context_object_name = 'countries'
+    paginate_by = 20
 
 
 class CountryDetailView(DetailView):
@@ -150,7 +187,6 @@ class MovieListView(ListView):
     template_name = 'Movie_app/movie_list.html'
     context_object_name = 'movies'
     paginate_by = 20
-
 
     def get_queryset(self):
         queryset = super().get_queryset()
@@ -242,8 +278,8 @@ def content_search(request):
 
             series = Series.objects.filter(
                 Q(title__icontains=query) | Q(description__icontains=query) |
-                Q(genres__name__icontains=query) | Q(director__name__icontains=query) |
-                Q(actors__name__icontains=query) | Q(created_in__name__icontains=query)
+                Q(genres__name__icontains=query) | Q(actors__name__icontains=query) |
+                Q(created_in__name__icontains=query)
             ).distinct().order_by("-rating")
 
             results = list(movies) + list(series)

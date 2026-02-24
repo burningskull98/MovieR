@@ -15,22 +15,28 @@
     <p>Сезонов: {{ content.seasons }}, Эпизодов: {{ content.episodes }}</p>
     {% endif %}
 
-   <!-- Внутри блока content, после описания -->
-{% if user.is_authenticated and user_preferences %}
-    {% if content in user_preferences.favorite_content.all %}
-        <form method="post" action="{% url 'recommendations:remove_from_favorites' content.tmdb_id %}" style="display: inline;">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-danger">Удалить из избранного</button>
-        </form>
+    {% if user.is_authenticated and user_preferences %}
+        {% if content in user_preferences.favorite_content.all %}
+            <form method="post" action="{% url 'recommendations:remove_from_favorites' content.tmdb_id %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-danger">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                    </svg>
+                </button>
+            </form>
+        {% else %}
+            <form method="post" action="{% url 'recommendations:add_to_favorites' content.tmdb_id %}" style="display: inline;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-success">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                    </svg>
+                </button>
+            </form>
+        {% endif %}
     {% else %}
-        <form method="post" action="{% url 'recommendations:add_to_favorites' content.tmdb_id %}" style="display: inline;">
-            {% csrf_token %}
-            <button type="submit" class="btn btn-success">Добавить в избранное</button>
-        </form>
-    {% endif %}
-{% else %}
-    <p>Войдите в аккаунт, чтобы добавить в избранное.</p>
-
+        <p>Войдите в аккаунт, чтобы добавить в избранное.</p>
     {% endif %}
 </div>
 {% endblock %}

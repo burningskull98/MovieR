@@ -1,0 +1,88 @@
+{% extends 'includes/base.html' %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+<style>
+    .swiper {
+        width: 100%;
+        padding: 20px 0;
+    }
+    .swiper-slide {
+        display: flex;
+        justify-content: center;
+    }
+    .swiper-slide .card {
+        width: 100%;
+        max-width: 300px;
+    }
+</style>
+{% endblock %}
+
+{% block title %}Главная страница - КиноСайт{% endblock %}
+
+{% block content %}
+<div class="container my-4">
+    <h1>Добро пожаловать на наш сайт Библиотека Кадров!</h1>
+    <h2>Популярные фильмы и сериалы:</h2>
+
+    {% if contents %}
+        <div class="swiper">
+            <div class="swiper-wrapper">
+                {% for content in contents %}
+                    <div class="swiper-slide">
+                        <div class="card" style="width: 18rem;">
+                            {% if content.poster_url %}
+                                <img src="{{ content.poster_url }}" class="card-img-top" alt="{{ content.title }}"
+                                     onerror="this.src='https://via.placeholder.com/500x750?text=Image+Error'">
+                            {% else %}
+                                <img src="https://via.placeholder.com/500x750?text=No+Image" class="card-img-top"
+                                     alt="{{ content.title }}">
+                            {% endif %}
+                            <div class="card-body">
+                                <h5 class="card-title">{{ content.title }}</h5>
+                                <p class="card-text">{{ content.description|truncatechars:100 }}</p>
+                                <p>Рейтинг: {{ content.rating }}/100</p>
+                                {% if content.is_series %}
+                                    <p>Сезонов: {{ content.seasons }}, Эпизодов: {{ content.episodes }}</p>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="swiper-pagination"></div>
+            <div class="swiper-button-prev"></div>
+            <div class="swiper-button-next"></div>
+        </div>
+    {% else %}
+        <p>Контент не найден.</p>
+    {% endif %}
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const swiper = new Swiper('.swiper', {
+            slidesPerView: 1,
+            spaceBetween: 20,
+            loop: true,
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            navigation: {
+                nextEl: '.swiper-button-next',
+                prevEl: '.swiper-button-prev',
+            },
+            breakpoints: {
+                320: { slidesPerView: 1 },
+                576: { slidesPerView: 2 },
+                768: { slidesPerView: 3 },
+                992: { slidesPerView: 4 },
+            },
+        });
+    });
+</script>
+{% endblock %}

@@ -5,28 +5,35 @@
 {% block content %}
 <div class="container mt-5">
     <h1>Моё избранное</h1>
+</div>
+{% if favorites %}
+<div class="row">
+    {% for content in favorites %}
+    <div class="col-md-4 mb-4">
+        <div class="card">
+            <div class="card-body">
+                <h5 class="card-title">{{ content.title }}</h5>
+                <img src="{{ content.poster_url }}" alt="{{ content.title }}" class="img-fluid mb-3">
+                <a href="{% url 'Movie_app:content_detail' content.tmdb_id %}" class="btn btn-outline-warning">Подробнее</a>
+                <form method="post" action="{% url 'recommendations:remove_from_favorites' content.tmdb_id %}"
+                      style="display: inline;">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-danger">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                             class="bi bi-heart-fill" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                  d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                        </svg>
+                    </button>
+                </form>
             </div>
-    {% if favorites %}
-        <div class="row">
-            {% for content in favorites %}
-                <div class="col-md-4 mb-4">
-                    <div class="card">
-                        <div class="card-body">
-                            <h5 class="card-title">{{ content.title }}</h5>
-                            <img src="{{ content.poster_url }}" alt="{{ content.title }}" class="img-fluid mb-3">
-                            <a href="{% url 'Movie_app:content_detail' content.tmdb_id %}" class="btn btn-primary">Подробнее</a>
-                            <form method="post" action="{% url 'recommendations:remove_from_favorites' content.tmdb_id %}" style="display: inline;">
-                                {% csrf_token %}
-                                <input type="hidden" name="content_id" value="{{ content.tmdb_id }}">
-                                <button type="submit" class="btn btn-danger">Удалить из избранного</button>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-            {% endfor %}
         </div>
-    {% else %}
-        <p>У вас нет избранного контента. <a href="{% url 'Movie_app:content_list' %}">Найти контент</a></p>
-    {% endif %}
+    </div>
+    {% endfor %}
+</div>
+{% else %}
+<p>У вас нет избранного контента. <a href="{% url 'Movie_app:content_list' %}">Найти контент</a></p>
+{% endif %}
 </div>
 {% endblock %}
+

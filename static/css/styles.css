@@ -1,5 +1,23 @@
-   <style>
+     <style>
+        .bg-indigo-400 {
+            background-color: #6610f2 !important;
+        }
+
+        /* Основной стиль для фонового изображения */
         body {
-            text-align: left; /* Выравнивание текста влево */
+            background-image: url('{% static "images/gradient-black-background-with-wavy-lines_327072-20065.jpg" %}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+    </style>
+    <style>
+        .bg-indigo-400 {
+            background-color: #6610f2 !important;
         }
     </style>

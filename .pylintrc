@@ -12,6 +12,7 @@ disable=
     W0621, #Redefining
     E1101, #Class
     W0212, #Acess
+    R1705, #Unnecessary
 
 
 

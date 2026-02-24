@@ -3,46 +3,64 @@
 {% block content %}
 <div class="container my-4">
     <h2>Все фильмы</h2>
-
-
+         <form method="get" action="{% url 'Movie_app:search_results' %}" class="d-flex ms-3">
+                    <input type="text" name="query" placeholder="Поиск ..." class="form-control me-2">
+                </form>
     {% if movies %}
-        <div class="row">
-            {% for movie in movies %}
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    {% if movie.poster_url %}
-                    <img src="{{ movie.poster_url }}" class="card-img-top" alt="{{ movie.title }}"
-                         onerror="this.src='https://via.placeholder.com/500x750?text=Image+Error'">
-                    {% else %}
-                    <img src="https://via.placeholder.com/500x750?text=No+Image" class="card-img-top"
-                         alt="{{ movie.title }}">
-                    {% endif %}
-                    <div class="card-body">
-                        <h5 class="card-title">{{ movie.title }}</h5>
-                        <p class="card-text">{{ movie.description|truncatechars:100 }}</p>
-                        <p>Рейтинг: {{ movie.rating }}/100</p>
-                        <a href="{% url 'Movie_app:content_detail' movie.tmdb_id %}" class="btn btn-primary">Подробнее</a>
-                    </div>
+    <div class="row">
+        {% for movie in movies %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                {% if movie.poster_url %}
+                <img src="{{ movie.poster_url }}" class="card-img-top" alt="{{ movie.title }}"
+                     onerror="this.src='https://via.placeholder.com/500x750?text=Image+Error'">
+                {% else %}
+                <img src="https://via.placeholder.com/500x750?text=No+Image" class="card-img-top"
+                     alt="{{ movie.title }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ movie.title }}</h5>
+                    <p class="card-text">{{ movie.description|truncatechars:100 }}</p>
+                    <p>Рейтинг: {{ movie.rating }}/100</p>
+                    <form method="post" action="{% url 'recommendations:add_to_favorites' movie.tmdb_id %}"
+                          style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-heart-fill" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                      d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                            </svg>
+                        </button>
+                        <a href="{% url 'Movie_app:content_detail' movie.tmdb_id %}"
+                           class="btn btn-warning">Подробнее</a>
                 </div>
             </div>
-            {% endfor %}
         </div>
-        <!-- Пагинация -->
-        {% if is_paginated %}
-            <nav aria-label="Page navigation">
-                <ul class="pagination">
-                    {% if page_obj.has_previous %}
-                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Предыдущая</a></li>
-                    {% endif %}
-                    <li class="page-item active"><span class="page-link">{{ page_obj.number }}</span></li>
-                    {% if page_obj.has_next %}
-                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Следующая</a></li>
-                    {% endif %}
-                </ul>
-            </nav>
-        {% endif %}
+        {% endfor %}
+    </div>
+    {% if is_paginated %}
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="btn btn-outline-warning" href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+            </li>
+            {% endif %}
+            <li class="page-item active">
+                <span class="btn btn-warning">{{ page_obj.number }}</span>
+            </li>
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="btn btn-outline-warning" href="?page={{ page_obj.next_page_number }}">Следующая</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
+
     {% else %}
-        <p>Фильмы не найдены.</p>
+    <p>Фильмы не найдены.</p>
     {% endif %}
 </div>
 {% endblock %}

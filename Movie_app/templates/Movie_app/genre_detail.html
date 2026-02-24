@@ -21,7 +21,7 @@
                         <h5 class="card-title">{{ content.title }}</h5>
                         <p class="card-text">{{ content.description|truncatechars:100 }}</p>
                         <p>Рейтинг: {{ content.rating }}/100</p>
-                        <a href="{% url 'Movie_app:content_detail' content.tmdb_id %}" class="btn btn-primary">Подробнее</a>
+                        <a href="{% url 'Movie_app:content_detail' content.tmdb_id %}" class="btn btn-outline-warning">Подробнее</a>
                     </div>
                 </div>
             </div>

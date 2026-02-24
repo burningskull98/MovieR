@@ -2,20 +2,46 @@
 
 {% block content %}
 <div class="container my-4">
-    {% if user.profile %}  <!-- Переместили if сюда, чтобы охватить весь контент -->
+    {% if user.profile %}
     <div class="row">
         <div class="col-md-4">
             <h1>Добро пожаловать, {{user.username}}!</h1>
             <div class="d-grid gap-2 mt-3">
-                <a href="{% url 'recommendations:get_favorites' %}" class="btn btn-outline-warning">Избранное</a>
-                <a href="{% url 'user:edit_profile' %}" class="btn btn-outline-warning">Редактировать профиль</a>
+                <a href="{% url 'recommendations:get_favorites' %}" class="btn btn-outline-warning">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-person-hearts" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd"
+                              d="M11.5 1.246c.832-.855 2.913.642 0 2.566-2.913-1.924-.832-3.421 0-2.566ZM9 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-9 8c0 1 1 1 1 1h10s1 0 1-1-1-4-6-4-6 3-6 4Zm13.5-8.09c1.387-1.425 4.855 1.07 0 4.277-4.854-3.207-1.387-5.702 0-4.276ZM15 2.165c.555-.57 1.942.428 0 1.711-1.942-1.283-.555-2.281 0-1.71Z"/>
+                    </svg>
+                </a>
+                <a href="{% url 'user:edit_profile' %}" class="btn btn-outline-warning">Редактировать
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-person-fill" viewBox="0 0 16 16">
+                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                    </svg>
+                </a>
                 <a href="{% url 'user:change_password' %}" class="btn btn-warning">Изменить пароль</a>
-                <a href="{% url 'user:logout' %}" class="btn btn-danger">Выйти</a>
+                <a href="{% url 'recommendations:view_recommendations' %}" class="btn btn-outline-warning">Рекомендации
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-person-video2" viewBox="0 0 16 16">
+                        <path d="M10 9.05a2.5 2.5 0 1 0 0-5 2.5 2.5 0 0 0 0 5Z"/>
+                        <path d="M2 1a2 2 0 0 0-2 2v9a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V3a2 2 0 0 0-2-2H2ZM1 3a1 1 0 0 1 1-1h2v2H1V3Zm4 10V2h9a1 1 0 0 1 1 1v9c0 .285-.12.543-.31.725C14.15 11.494 12.822 10 10 10c-3.037 0-4.345 1.73-4.798 3H5Zm-4-2h3v2H2a1 1 0 0 1-1-1v-1Zm3-1H1V8h3v2Zm0-3H1V5h3v2Z"/>
+                    </svg>
+                </a>
+                <a href="{% url 'user:logout' %}" class="btn btn-danger">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-door-closed" viewBox="0 0 16 16">
+                        <path d="M3 2a1 1 0 0 1 1-1h8a1 1 0 0 1 1 1v13h1.5a.5.5 0 0 1 0 1h-13a.5.5 0 0 1 0-1H3V2zm1 13h8V2H4v13z"/>
+                        <path d="M9 9a1 1 0 1 0 2 0 1 1 0 0 0-2 0z"/>
+                    </svg>
+                </a>
             </div>
         </div>
 
         <div class="col-md-8">
-            <h3>Информация о пользователе</h3>
+            <h3>Информация о пользователе
+
+            </h3>
             <div class="row">
                 <div class="col-md-6">
                     <p><strong>Имя:</strong> {{ user.first_name }}</p>
@@ -25,18 +51,18 @@
                 </div>
                 <div class="col-md-6">
                     <p><strong>Телефон:</strong> {{ profile.phone|default:"Не указан" }}</p>
-                    <p><strong>Дата рождения:</strong> {{ profile.birth_date|date:"d.m.Y"|default:"Не указана" }}</p>  <!-- Добавлен фильтр даты -->
+                    <p><strong>Дата рождения:</strong> {{ profile.birth_date|date:"d.m.Y"|default:"Не указана" }}</p>
                 </div>
             </div>
         </div>
     </div>
-       <div class="d-grid gap-2 mt-3">
-                <a href="{% url 'recommendations:generate_recommendations' %}" class="btn btn-outline-warning">Подобрать контент</a>
-                <a href="{% url 'recommendations:view_recommendations' %}" class="btn btn-outline-warning">показать</a>
-            </div>
-        </div>
+    <div class="d-grid gap-2 mt-3">
+        <a href="{% url 'recommendations:generate_recommendations' %}" class="btn btn-outline-warning">Подобрать
+            контент</a>
+    </div>
     {% else %}
     <p>Профиль не найден. Обратитесь к администратору.</p>
     {% endif %}
 </div>
 {% endblock %}
+

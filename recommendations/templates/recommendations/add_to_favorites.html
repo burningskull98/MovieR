@@ -14,12 +14,9 @@
     {% endif %}
     <form method="post" action="{% url 'recommendations:add_to_favorites' %}">
         {% csrf_token %}
-        <div class="mb-3">
-            <label for="content_id" class="form-label">ID контента</label>
-            <input type="number" class="form-control" id="content_id" name="content_id" required placeholder="Введите ID фильма или сериала">
-            <div class="form-text">Найдите ID на странице контента в Movie_app.</div>
-        </div>
-        <button type="submit" class="btn btn-primary">Добавить в избранное</button>
+        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-heart-fill" viewBox="0 0 16 16">
+  <path fill-rule="evenodd" d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+</svg>>Добавить в избранное</button>
     </form>
     <a href="{% url 'recommendations:get_favorites' %}" class="btn btn-secondary mt-3">Посмотреть избранное</a>
 </div>

@@ -5,13 +5,42 @@
     <div class="row justify-content-center">
         <div class="col-md-8">
             <h2>Редактировать профиль</h2>
+
             <form method="post">
                 {% csrf_token %}
+
                 <h4>Информация пользователя</h4>
-                {{ user_form.as_p }}
+                {% for field in user_form %}
+                    <div class="mb-3">
+                        <label class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="text-danger">
+                                {% for error in field.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
                 <h4>Информация профиля</h4>
-                {{ profile_form.as_p }}
+                {% for field in profile_form %}
+                    <div class="mb-3">
+                        <label class="form-label">{{ field.label }}</label>
+                        {{ field }}
+                        {% if field.errors %}
+                            <div class="text-danger">
+                                {% for error in field.errors %}
+                                    {{ error }}
+                                {% endfor %}
+                            </div>
+                        {% endif %}
+                    </div>
+                {% endfor %}
+
                 <button type="submit" class="btn btn-outline-warning">Сохранить изменения</button>
+                <a href="{% url 'user:profile' %}" class="btn btn-secondary">Отмена</a>
             </form>
         </div>
     </div>

@@ -76,9 +76,7 @@ def logout_view(request):
 @login_required
 def profile_edit(request):
     """Редактирование профиля"""
-    profile, created = Profile.objects.get_or_create(user=request.user)
-    if created:
-        messages.info(request, "Профиль был создан автоматически.")
+    profile = Profile.objects.get_or_create(user=request.user)[0]
 
     if request.method == "POST":
         user_form = UserForm(request.POST, instance=request.user)
@@ -89,21 +87,19 @@ def profile_edit(request):
             profile_form.save()
             messages.success(request, "Профиль обновлен!")
             return redirect("user:profile")
-        messages.error(
-            request, "Ошибка при обновлении профиля. "
-                     "Пожалуйста, проверьте ошибки!"
-        )
+        else:
+            print("User form errors:", user_form.errors)
+            print("Profile form errors:", profile_form.errors)
+            messages.error(
+                request, "Ошибка при обновлении профиля. "
+                         "Пожалуйста, проверьте ошибки!"
+            )
+    else:
+        user_form = UserForm(instance=request.user)
+        profile_form = ProfileForm(instance=profile)
 
-    user_form = UserForm(instance=request.user)
-    profile_form = ProfileForm(instance=profile)
-    return render(
-        request,
-        "user/edit_profile.html",
-        {
-            "user_form": user_form,
-            "profile_form": profile_form,
-        },
-    )
+    return render(request, "user/edit_profile.html",
+                  {"user_form": user_form, "profile_form": profile_form})
 
 
 @login_required

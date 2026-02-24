@@ -71,13 +71,11 @@ class ContentBasedRecommender:
         """Рекомендует контент на основе ввода пользователя."""
         from Movie_app.models import Content
 
-        # Объединяем входные данные в один список для текста
         input_parts = (user_input.get('genres', []) + user_input.get('actors', [])
                        + user_input.get('directors', []))
         favorite_ids = user_input.get('favorite_content', [])
         disliked_ids = user_input.get('disliked_content', [])
 
-        # Строим input_text
         input_text = ' '.join(input_parts)
         for tmdb_id in favorite_ids:
             try:
@@ -96,7 +94,6 @@ class ContentBasedRecommender:
         input_vector = self.vectorizer.transform([input_text])
         similarities = cosine_similarity(input_vector, self.content_vectors).flatten()
 
-        # Исключаем disliked
         for i, tmdb_id in enumerate(self.content_ids):
             if tmdb_id in disliked_ids:
                 similarities[i] = -1

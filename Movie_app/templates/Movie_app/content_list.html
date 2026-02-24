@@ -5,46 +5,63 @@
     <h2>Все фильмы и сериалы</h2>
 
     {% if contents %}
-        <div class="row">
-            {% for content in contents %}
-            <div class="col-md-4 mb-4">
-                <div class="card">
-                    {% if content.poster_url %}
-                    <img src="{{ content.poster_url }}" class="card-img-top" alt="{{ content.title }}"
-                         onerror="this.src='https://via.placeholder.com/500x750?text=Image+Error'">
-                    {% else %}
-                    <img src="https://via.placeholder.com/500x750?text=No+Image" class="card-img-top"
-                         alt="{{ content.title }}">
+    <div class="row">
+        {% for content in contents %}
+        <div class="col-md-4 mb-4">
+            <div class="card">
+                {% if content.poster_url %}
+                <img src="{{ content.poster_url }}" class="card-img-top" alt="{{ content.title }}"
+                     onerror="this.src='https://via.placeholder.com/500x750?text=Image+Error'">
+                {% else %}
+                <img src="https://via.placeholder.com/500x750?text=No+Image" class="card-img-top"
+                     alt="{{ content.title }}">
+                {% endif %}
+                <div class="card-body">
+                    <h5 class="card-title">{{ content.title }}</h5>
+                    <p class="card-text">{{ content.description|truncatechars:100 }}</p>
+                    <p>Рейтинг: {{ content.rating }}/100</p>
+                    {% if content.is_series %}
+                    <p>Сезонов: {{ content.seasons }}, Эпизодов: {{ content.episodes }}</p>
                     {% endif %}
-                    <div class="card-body">
-                        <h5 class="card-title">{{ content.title }}</h5>
-                        <p class="card-text">{{ content.description|truncatechars:100 }}</p>
-                        <p>Рейтинг: {{ content.rating }}/100</p>
-                        {% if content.is_series %}  <!-- Добавлено: отображение сезонов и эпизодов только для сериалов -->
-                        <p>Сезонов: {{ content.seasons }}, Эпизодов: {{ content.episodes }}</p>
-                        {% endif %}
-                        <a href="{% url 'Movie_app:content_detail' content.tmdb_id %}" class="btn btn-primary">Подробнее</a>
-                    </div>
+                    <a href="{% url 'Movie_app:content_detail' content.tmdb_id %}" class="btn btn-outline-warning">Подробнее</a>
+                    <form method="post" action="{% url 'recommendations:add_to_favorites' content.tmdb_id %}"
+                          style="display: inline;">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-success">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-heart-fill" viewBox="0 0 16 16">
+                                <path fill-rule="evenodd"
+                                      d="M8 1.314C12.438-3.248 23.534 4.735 8 15-7.534 4.736 3.562-3.248 8 1.314z"/>
+                            </svg>
+                        </button>
                 </div>
             </div>
-            {% endfor %}
         </div>
-        <!-- Пагинация -->
-        {% if is_paginated %}
-            <nav aria-label="Page navigation">
-                <ul class="pagination">
-                    {% if page_obj.has_previous %}
-                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.previous_page_number }}">Предыдущая</a></li>
-                    {% endif %}
-                    <li class="page-item active"><span class="page-link">{{ page_obj.number }}</span></li>
-                    {% if page_obj.has_next %}
-                        <li class="page-item"><a class="page-link" href="?page={{ page_obj.next_page_number }}">Следующая</a></li>
-                    {% endif %}
-                </ul>
-            </nav>
-        {% endif %}
+        {% endfor %}
+    </div>
+    {% if is_paginated %}
+    <nav aria-label="Page navigation">
+        <ul class="pagination">
+            {% if page_obj.has_previous %}
+            <li class="page-item">
+                <a class="btn btn-outline-warning" href="?page={{ page_obj.previous_page_number }}">Предыдущая</a>
+            </li>
+            {% endif %}
+            <li class="page-item active">
+                <span class="btn btn-warning">{{ page_obj.number }}</span>
+            </li>
+            {% if page_obj.has_next %}
+            <li class="page-item">
+                <a class="btn btn-outline-warning" href="?page={{ page_obj.next_page_number }}">Следующая</a>
+            </li>
+            {% endif %}
+        </ul>
+    </nav>
+    {% endif %}
     {% else %}
-        <p>Контент не найден.</p>
+    <p>Контент не найден.</p>
     {% endif %}
 </div>
 {% endblock %}
+
+%}

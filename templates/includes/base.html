@@ -4,15 +4,39 @@
 <html lang="ru" data-bs-theme="dark">
 <head>
     <title>Платформа по рекомендации кино</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
+    {% block extra_css %}{% endblock %}
+</head>
     <style>
-        .bg-indigo-400 {
-            background-color: #6610f2 !important;
+        body {
+            background-image: url('{% static "images/gradient-black-background-with-wavy-lines_327072-20065.jpg" %}');
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+        }
+
+        .navbar {
+            background-color: transparent !important; /* Установите фоновый цвет прозрачным */
+            backdrop-filter: blur(5px); /* Добавьте эффект размытия для фона */
+        }
+
+        footer {
+            color: white; /* Цвет текста футера */
+            padding: 1rem 0; /* Внутренние отступы */
+            text-align: center; /* Выравнивание текста */
         }
     </style>
 </head>
 <body>
-<nav class="navbar navbar-expand-lg navbar-dark bg-indigo-400">
+<div class="body-overlay"></div>
+<nav class="navbar navbar-expand-lg navbar-dark">
     <div class="container-fluid">
         <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav"
                 aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
@@ -20,22 +44,35 @@
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
             <ul class="navbar-nav me-auto">
-
                 <li class="nav-item">
-                    <a class="nav-link" href="{% url 'user:profile' %}">Личный кабинет</a>
-                </li>
+                    <!-- Пример отдельной кнопки danger -->
+                    <div class="btn-group">
+                        <button type="button" class="btn btn-warning dropdown-toggle" data-bs-toggle="dropdown"
+                                aria-expanded="false">
+                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                 class="bi bi-card-list" viewBox="0 0 16 16">
+                                <path d="M14.5 3a.5.5 0 0 1 .5.5v9a.5.5 0 0 1-.5.5h-13a.5.5 0 0 1-.5-.5v-9a.5.5 0 0 1 .5-.5h13zm-13-1A1.5 1.5 0 0 0 0 3.5v9A1.5 1.5 0 0 0 1.5 14h13a1.5 1.5 0 0 0 1.5-1.5v-9A1.5 1.5 0 0 0 14.5 2h-13z"/>
+                                <path d="M5 8a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7A.5.5 0 0 1 5 8zm0-2.5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm0 5a.5.5 0 0 1 .5-.5h7a.5.5 0 0 1 0 1h-7a.5.5 0 0 1-.5-.5zm-1-5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zM4 8a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0zm0 2.5a.5.5 0 1 1-1 0 .5.5 0 0 1 1 0z"/>
+                            </svg>
+                        </button>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="{% url 'Movie_app:home' %}">Главная</a></li>
+                            <li><a class="dropdown-item" href="{% url 'Movie_app:genre_list' %}">Жанры</a></li>
+                            <li><a class="dropdown-item" href="{% url 'Movie_app:actor_list' %}">Актёры</a></li>
+                            <li><a class="dropdown-item" href="{% url 'Movie_app:director_list' %}">Режиссёры</a></li>
+                            <li><a class="dropdown-item" href="{% url 'Movie_app:country_list' %}">Страны</a></li>
+                            <li>
+                                <hr class="dropdown-divider"/>
+                                <a class="nav-link" href="{% url 'user:profile' %}">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                                         class="bi bi-person-fill" viewBox="0 0 16 16">
+                                        <path d="M3 14s-1 0-1-1 1-4 6-4 6 3 6 4-1 1-1 1H3Zm5-6a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z"/>
+                                    </svg>
+                                </a>
 
-                <li class="nav-item">
-                    <a class="nav-link" href="{% url 'user:login' %}">Войти</a>
-                </li>
+                        </ul>
+                    </div>
 
-
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{% url 'Movie_app:content_list' %}">Контент</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{% url 'Movie_app:genre_list' %}">Жанры</a>
-                </li>
                 <li class="nav-item">
                     <a class="nav-link active" aria-current="page" href="{% url 'Movie_app:movie_list' %}">Фильмы</a>
                 </li>
@@ -43,57 +80,70 @@
                     <a class="nav-link active" aria-current="page" href="{% url 'Movie_app:series_list' %}">Сериалы</a>
                 </li>
                 <form method="get" action="{% url 'Movie_app:search_results' %}" class="d-flex ms-3">
-                    <input type="text" name="query" placeholder="Поиск ..." class="form-control me-2">
-                    <button type="submit" class="btn btn-warning">Найти</button>
+                    <button type="submit" class="btn btn-warning">
+                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                             class="bi bi-search-heart-fill" viewBox="0 0 16 16">
+                            <path d="M6.5 13a6.474 6.474 0 0 0 3.845-1.258h-.001c.03.04.062.078.098.115l3.85 3.85a1 1 0 0 0 1.415-1.414l-3.85-3.85a1.008 1.008 0 0 0-.115-.1A6.471 6.471 0 0 0 13 6.5 6.502 6.502 0 0 0 6.5 0a6.5 6.5 0 1 0 0 13Zm0-8.518c1.664-1.673 5.825 1.254 0 5.018-5.825-3.764-1.664-6.69 0-5.018Z"/>
+                        </svg>
+                    </button>
                 </form>
-
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{% url 'recommendations:get_favorites' %}">Избранное</a>  <!-- Исправлено: ссылка на список избранного -->
-                </li>
-
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{% url 'Movie_app:actor_list' %}">Актёры</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{% url 'Movie_app:director_list' %}">Режиссёры</a>
-                </li>
-                <li class="nav-item">
-                    <a class="nav-link active" aria-current="page" href="{% url 'Movie_app:country_list' %}">Страны</a>
-                </li>
-
+            </ul>
+            <li class="nav-item">
+                <a href="{% url 'user:login' %}" class="btn btn-outline-warning">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-house-door-fill" viewBox="0 0 16 16">
+                        <path d="M6.5 14.5v-3.505c0-.245.25-.495.5-.495h2c.25 0 .5.25.5.5v3.5a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5v-7a.5.5 0 0 0-.146-.354L13 5.793V2.5a.5.5 0 0 0-.5-.5h-1a.5.5 0 0 0-.5.5v1.293L8.354 1.146a.5.5 0 0 0-.708 0l-6 6A.5.5 0 0 0 1.5 7.5v7a.5.5 0 0 0 .5.5h4a.5.5 0 0 0 .5-.5Z"/>
+                    </svg>
+                </a>
+            </li>
+            <a href="{% url 'recommendations:get_favorites' %}" class="btn btn-outline-warning">
+                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                     class="bi bi-person-hearts" viewBox="0 0 16 16">
+                    <path fill-rule="evenodd"
+                          d="M11.5 1.246c.832-.855 2.913.642 0 2.566-2.913-1.924-.832-3.421 0-2.566ZM9 5a3 3 0 1 1-6 0 3 3 0 0 1 6 0Zm-9 8c0 1 1 1 1 1h10s1 0 1-1-1-4-6-4-6 3-6 4Zm13.5-8.09c1.387-1.425 4.855 1.07 0 4.277-4.854-3.207-1.387-5.702 0-4.276ZM15 2.165c.555-.57 1.942.428 0 1.711-1.942-1.283-.555-2.281 0-1.71Z"/>
+                </svg>
+            </a>
         </div>
     </div>
 </nav>
+
 <div class="container">
     {% block content %}{% endblock %}
 </div>
-<footer class="bg-dark text-white py-3">
+
+<footer>
     <div class="container">
         <div class="row">
             <div class="col-md-6">
                 <h5>Фильмы</h5>
                 <ul class="list-unstyled">
-                    <li><a href="{% url 'Movie_app:movie_list' %}">Фильмы</a></li>
-                    <li><a href="">Персональный подбор</a></li>
-                    <li><a href="{% url 'recommendations:random_recommendation' %}" class="btn btn-secondary">Случайный контент</a></li>
+                    <li><a href="{% url 'Movie_app:movie_list' %}" class="btn btn-outline-warning">Фильмы</a></li>
+                    <li><a href="{% url 'recommendations:generate_recommendations' %}" class="btn btn-outline-warning">Персональный
+                        подбор</a></li>
+                    <li><a href="{% url 'recommendations:random_recommendation' %}" class="btn btn-outline-warning">Случайный
+                        контент</a></li>
                 </ul>
             </div>
             <div class="col-md-6">
                 <h5>Сериалы</h5>
                 <ul class="list-unstyled">
-                    <li><a href="{% url 'Movie_app:series_list' %}">Сериалы</a></li>
-                    <li><a href="">Персональный подбор</a></li>
-                    <li><a href="{% url 'recommendations:random_recommendation' %}">Случайный контент</a></li>
+                    <li><a href="{% url 'Movie_app:series_list' %}" class="btn btn-outline-warning">Сериалы</a></li>
+                    <li><a href="{% url 'recommendations:generate_recommendations' %}" class="btn btn-outline-warning">Персональный
+                        подбор</a></li>
+                    <li><a href="{% url 'recommendations:random_recommendation' %}" class="btn btn-outline-warning">Случайный
+                        контент</a></li>
                 </ul>
             </div>
         </div>
         <p class="text-center">© 2026 "Библиотека кадров"</p>
     </div>
 </footer>
-
-<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- jQuery (обязательно для Bootstrap) -->
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+    {% block extra_js %}{% endblock %}
 </body>
 </html>
-
